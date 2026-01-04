@@ -46,6 +46,56 @@
     .meta { display:flex; justify-content:space-between; align-items:center; color: var(--muted); font-size:12px }
     footer { margin: 28px 0 8px; color: var(--muted); font-size: 12px }
     .pill { padding:4px 8px; border-radius:999px; border:1px solid #2c3d61; font-size:11px }
+    
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: white;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 100;
+      border: none;
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .back-to-top:hover {
+      background: var(--accent2);
+      transform: translateY(-4px);
+    }
+    
+    .version-display {
+      position: fixed;
+      bottom: 34px;
+      right: 84px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 100;
+      pointer-events: none;
+    }
+    .version-display.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -84,7 +134,17 @@
     </footer>
   </div>
 
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+  
+  <!-- Version Number - Change this before pushing to GitHub -->
+  <div id="versionDisplay" class="version-display"></div>
+
   <script>
+    // EDIT THE VERSION HERE
+    const SITE_VERSION = 'v1.0.0';
+
     const items = [
         { id: 'slope', title: 'Slope', color: '#23d944', url: 'games/slope.html', thumb: 'thumbnails/slope.png' },
         { id: 'krunker', title: 'Krunker', color: '#fbc02d', url: 'games/krunker/indexforkunker.html', thumb: 'thumbnails/krunker.jpg' },
@@ -144,6 +204,33 @@
 
     searchInput.addEventListener('input', applyFilter)
     render(items)
+
+    /* Back to Top Logic */
+    const backToTopBtn = document.getElementById('backToTop');
+    const versionDisplay = document.getElementById('versionDisplay');
+    
+    // Set version text
+    versionDisplay.textContent = SITE_VERSION;
+
+    window.addEventListener('scroll', () => {
+      // Show when scrolled near the bottom (within 200px of bottom)
+      // or if the page is short, just ensure it doesn't overlap weirdly
+      // The user asked for "if scroll allthe way down", so we check proximity to bottom.
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const bodyHeight = document.body.offsetHeight;
+      
+      if (scrollPosition >= bodyHeight - 200) {
+        backToTopBtn.classList.add('visible');
+        versionDisplay.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+        versionDisplay.classList.remove('visible');
+      }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     /* Game Launch Logic */
     function launchGame(id) {
