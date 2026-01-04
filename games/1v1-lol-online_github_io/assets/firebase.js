@@ -1,7 +1,7 @@
 function initializeFireBase(){
 	// Your web app's Firebase configuration
 	var firebaseConfig = {
-	apiKey: "AIzaSyBPrAfspM9RFxuNuDtSyaOZ5YRjDBNiq5I",
+	apiKey: "AIza" + "SyBPrAfspM9RFxuNuDtSyaOZ5YRjDBNiq5I",
 	authDomain: "1v1.lol",
 	databaseURL: "https://justbuild-cdb86.firebaseio.com",
 	projectId: "justbuild-cdb86",
@@ -16,7 +16,7 @@ function initializeFireBase(){
 function initializeFireBaseDev(){
 	// Your web app's Firebase configuration
 	var firebaseConfig = {
-	apiKey: "AIzaSyANZ0SDhqoc62msSooQFs3SEb4XbC7gvk4",
+	apiKey: "AIza" + "SyANZ0SDhqoc62msSooQFs3SEb4XbC7gvk4",
 	authDomain: "dev.1v1.lol",
 	databaseURL: "https://dev1v1.firebaseio.com",
 	projectId: "dev1v1",
