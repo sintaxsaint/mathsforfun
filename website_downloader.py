@@ -99,6 +99,11 @@ def main():
             if is_asset:
                 local_filename = download_file(absolute_url, assets_folder)
                 if local_filename:
+                    # If it's a CSS file, parse it for more assets
+                    if ext == '.css':
+                        css_path = os.path.join(assets_folder, local_filename)
+                        process_css(css_path, absolute_url, assets_folder)
+
                     # Replace in HTML
                     # We need to be careful with replacement. 
                     # If resource_url is "style.css", we replace with "assets/style.css"
