@@ -90,6 +90,11 @@
   </head>
 
   <body>
+    <style>
+      .back-btn { position:absolute; top:20px; left:20px; z-index:999; text-decoration:none; background:rgba(0,0,0,0.5); color:#fff; padding:10px 20px; border-radius:8px; font-family:sans-serif; font-weight:bold; border: 1px solid rgba(255,255,255,0.2); transition: 0.2s; backdrop-filter: blur(5px); }
+      .back-btn:hover { background:rgba(255,255,255,0.1); }
+    </style>
+    <a href="../../index.html" class="back-btn">← Back</a>
     <div class="ads">
       <div class="ad-smallscreen">
         <div class="ad ad-rectangle-bottom"></div>
@@ -143,18 +148,7 @@
     <script id="unity-loader" src="assets/UnityLoader.js"></script>
     <!--<script src="Build/assets/UnityLoader.js"></script>-->
     <script>
-      var gameJsonUrl = "WebGL.json"; //%gameJsonUrl
-      var hostname = window.location.hostname;
-      if (hostname.indexOf("dev1v1") >= 0 || hostname.indexOf("dev.1v1") >= 0 || hostname.indexOf("test1v1") >= 0 || hostname.indexOf("test.1v1") >= 0) {
-        let urlParams = new URLSearchParams(window.location.search);
-        let queryParam = urlParams.get("version");
-
-        if (queryParam !== undefined && queryParam !== null) {
-          gameJsonUrl = gameJsonUrl.replace(/[0-9][0-9]+/i, queryParam);
-        }
-      }
-      var gameInstance = UnityLoader.instantiate("gameContainer", gameJsonUrl, { onProgress: UnityProgress });
-      //var gameInstance = UnityLoader.instantiate("gameContainer", "Build/WebGL.json", {onProgress: UnityProgress});
+      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/WebGL.json", {onProgress: UnityProgress});
 
       window.unityInstance = gameInstance;
       var lockedOccured = false;
@@ -206,7 +200,9 @@
           if (document.getElementById("adRectangleBottom") == null) {
             var el = document.getElementsByClassName("ad-rectangle-bottom")[0];
             el.id = "adRectangleBottom";
-            cpmstarAPI({ kind: "go", module: "POOL 83025", config: { conditions: { target: { el: el, kind: "replace" } } } });
+            if (typeof cpmstarAPI !== "undefined") {
+              cpmstarAPI({ kind: "go", module: "POOL 83025", config: { conditions: { target: { el: el, kind: "replace" } } } });
+            }
           }
         } else {
           if (document.getElementById("adLeaderboardBottom") == null) {
