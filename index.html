@@ -239,9 +239,22 @@
     /* Game Launch Logic */
     function launchGame(id) {
         const game = items.find(i => i.id === id);
-        if(game && game.url) {
+        if(game && game.externalId) {
+            const overlay = document.getElementById('gameOverlay');
+            const frame = document.getElementById('gameFrame');
+            frame.src = `https://sintaxsaint.github.io/website-games-index/call.html?id=${game.externalId}`;
+            overlay.classList.add('active');
+        } else if (game && game.url) {
+            // Fallback
             window.location.href = game.url;
         }
+    }
+
+    function closeGame() {
+        const overlay = document.getElementById('gameOverlay');
+        const frame = document.getElementById('gameFrame');
+        overlay.classList.remove('active');
+        frame.src = '';
     }
   </script>
 </body>
