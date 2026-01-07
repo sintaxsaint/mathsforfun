@@ -9,9 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script>
-    if (window.location.protocol === 'file:') {
-      window.location.replace('http://localhost:8000');
-    }
   </script>
   <style>
     :root { --bg:#0b0f1a; --card:#121826; --muted:#8aa0b6; --text:#e6eef8; --accent:#4f9cf0; --accent2:#7c4dff; }
@@ -110,7 +107,7 @@
         </div>
       </div>
       <div class="actions">
-        <a class="btn" href="https://bit.ly/3MZHk4N" target="_blank">Request a Game</a>
+        <a class="btn" href="https://sintaxsaint.github.io/website-games-index/request.html" target="_blank">Request a Game</a>
       </div>
     </header>
 
@@ -146,15 +143,15 @@
     const SITE_VERSION = 'v1.0.2';
 
     const items = [
-        { id: 'slope', title: 'Slope', color: '#23d944', url: 'games/slope.html', thumb: 'thumbnails/slope.png' },
-        { id: 'krunker', title: 'Krunker', color: '#fbc02d', url: 'games/krunker.io/krunker.html', thumb: 'thumbnails/krunker.jpg' },
-        { id: '1v1lol', title: '1v1.LOL', color: '#ff0000', url: 'games/1v1-lol-online_github_io/index.html', thumb: 'thumbnails/1v1-lol.jpg' },
-        { id: 'capybara', title: 'Capybara Clicker', color: '#8B4513', url: 'games/capybara-game_com/index.html', thumb: 'thumbnails/capybaraclicker.jpg' },
-        { id: 'run3', title: 'Run 3', color: '#0000ff', url: 'games/run3/index.html', thumb: 'thumbnails/run-3-game.png' },
-        { id: 'bloxorz', title: 'Bloxorz', color: '#ff5722', url: 'games/bloxorz/index.html', thumb: 'thumbnails/bloxorz.png' },
-        { id: 'sugarsugar', title: 'Sugar Sugar 3', color: '#ffffff', url: 'games/sugar-sugar/index.html', thumb: 'thumbnails/sugar-sugar.jpg' },
-        { id: 'timeshooter3', title: 'Time Shooter 3', color: '#333333', url: 'games/time-shooter-3/index.html', thumb: 'thumbnails/time-shooter-3.jpg' },
-        { id: 'worldshardestgame', title: "World's Hardest Game", color: '#ff0000', url: 'games/worlds-hardest-game/index.html', thumb: 'thumbnails/worlds-hardest-game.png' }
+        { id: 'slope', title: 'Slope', color: '#23d944', exid: 10, thumb: 'thumbnails/slope.png' },
+        { id: 'krunker', title: 'Krunker', color: '#fbc02d', exid: 5, thumb: 'thumbnails/krunker.jpg' },
+        { id: '1v1lol', title: '1v1.LOL', color: '#ff0000', exid: 2, thumb: 'thumbnails/1v1-lol.jpg' },
+        { id: 'capybara', title: 'Capybara Clicker', color: '#8B4513', exid: 4, thumb: 'thumbnails/capybaraclicker.jpg' },
+        { id: 'run3', title: 'Run 3', color: '#0000ff', exid: 6, thumb: 'thumbnails/run-3-game.png' },
+        { id: 'bloxorz', title: 'Bloxorz', color: '#ff5722', exid: 3, thumb: 'thumbnails/bloxorz.png' },
+        { id: 'sugarsugar', title: 'Sugar Sugar 3', color: '#ffffff', exid: 7, thumb: 'thumbnails/sugar-sugar.jpg' },
+        { id: 'timeshooter3', title: 'Time Shooter 3', color: '#333333', exid: 8, thumb: 'thumbnails/time-shooter-3.jpg' },
+        { id: 'worldshardestgame', title: "World's Hardest Game", color: '#ff0000', exid: 9, thumb: 'thumbnails/worlds-hardest-game.png' }
     ]
 
     const grid = document.getElementById('grid')
@@ -239,22 +236,64 @@
     /* Game Launch Logic */
     function launchGame(id) {
         const game = items.find(i => i.id === id);
-        if(game && game.externalId) {
-            const overlay = document.getElementById('gameOverlay');
-            const frame = document.getElementById('gameFrame');
-            frame.src = `https://sintaxsaint.github.io/website-games-index/call.html?id=${game.externalId}`;
-            overlay.classList.add('active');
+        if(game && game.exid) {
+            userRenderGame(game.exid);
         } else if (game && game.url) {
-            // Fallback
             window.location.href = game.url;
         }
     }
 
-    function closeGame() {
-        const overlay = document.getElementById('gameOverlay');
-        const frame = document.getElementById('gameFrame');
-        overlay.classList.remove('active');
-        frame.src = '';
+    function userRenderGame(exid) {
+        const grid = document.getElementById('grid');
+        const hero = document.querySelector('.hero');
+        const footer = document.querySelector('footer');
+        const container = document.querySelector('.container');
+        const actionBtn = document.querySelector('.actions .btn');
+        
+        // Hide elements
+        if(hero) hero.style.display = 'none';
+        if(footer) footer.style.display = 'none';
+        
+        // Transform "Request a Game" button to "Back"
+        if(actionBtn) {
+            actionBtn.textContent = 'Back';
+            actionBtn.removeAttribute('href');
+            actionBtn.removeAttribute('target');
+            actionBtn.style.cursor = 'pointer';
+            actionBtn.onclick = () => location.reload();
+        }
+
+        // Adjust layout for full screen
+        container.style.maxWidth = '100%';
+        container.style.padding = '0';
+        container.style.height = '100vh';
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        
+        // Adjust header padding since we removed container padding
+        const header = document.querySelector('header');
+        if(header) {
+            header.style.padding = '12px 24px';
+            header.style.flexShrink = '0'; // Prevent header from shrinking
+        }
+
+        // Setup grid as the main content area
+        grid.style.display = 'block';
+        grid.style.flex = '1'; // Take remaining height
+        grid.style.margin = '0';
+        grid.style.height = '100%';
+        grid.style.overflow = 'hidden';
+        
+        grid.innerHTML = `
+            <iframe  
+                 src="https://sintaxsaint.github.io/website-games-index/call.html?id=${exid}"  
+                 width="100%"  
+                 height="100%"  
+                 frameborder="0"  
+                 allowfullscreen
+                 style="display: block; width: 100%; height: 100%; border: none;"> 
+             </iframe>
+        `;
     }
   </script>
 </body>
